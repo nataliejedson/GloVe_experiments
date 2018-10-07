@@ -5,8 +5,8 @@ import random
 
 def generate():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--vocab_file', default='vocab.txt', type=str)
-    parser.add_argument('--vectors_file', default='vectors.txt', type=str)
+    parser.add_argument('--vocab_file', default='default_vocab.txt', type=str)
+    parser.add_argument('--vectors_file', default='default_vectors.txt', type=str)
     parser.add_argument('--input_file', default='no file given', type=str)
     args = parser.parse_args()
 
