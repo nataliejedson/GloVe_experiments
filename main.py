@@ -7,6 +7,7 @@ def generate():
     parser = argparse.ArgumentParser()
     parser.add_argument('--vocab_file', default='vocab.txt', type=str)
     parser.add_argument('--vectors_file', default='vectors.txt', type=str)
+    parser.add_argument('--input_file', default='no file given', type=str)
     args = parser.parse_args()
 
     with open(args.vocab_file, 'r') as f:
@@ -32,7 +33,12 @@ def generate():
     W_norm = np.zeros(W.shape)
     d = (np.sum(W ** 2, 1) ** (0.5))
     W_norm = (W.T / d).T
-    return (W_norm, vocab, ivocab)
+
+    input_filepath = args.input_file
+
+
+
+    return (W_norm, vocab, ivocab, input_filepath)
 
 
 #this accounts for more than one word in `input_term`
@@ -66,16 +72,26 @@ def random_index():
     return (random.randint(1,10) - 1)
 
 
-
 if __name__ == "__main__":
-    W, vocab, ivocab = generate()
+    W, vocab, ivocab, input_filepath = generate()
     while True:
-        input_term = raw_input("\nEnter word or sentence without punctuation (EXIT to break): ")
-        if input_term == 'EXIT':
-            break
+        if input_filepath == 'no file given':
+
+            input_term = raw_input("\n\nEnter word or sentence without punctuation (EXIT to break): ")
+            if input_term == 'EXIT':
+                break
+            else:
+                all_words = input_term.lower().split(" ")
+                transformed_words= [closest10(W, vocab, ivocab, a)[random_index()] for a in all_words]
+                print("\n\n")
+                print(" ".join(transformed_words))
         else:
-            all_words = input_term.lower().split(" ")
+            input_file = open(input_filepath, 'r')
+            input_file_text = input_file.read()
+            all_words = input_file_text.lower().split(" ")
             transformed_words= [closest10(W, vocab, ivocab, a)[random_index()] for a in all_words]
-            print("\n\n")
+            input_file.close()
             print(" ".join(transformed_words))
+            break
+
 
